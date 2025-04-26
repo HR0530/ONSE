@@ -18,7 +18,7 @@ const ychanImg = new Image(); ychanImg.src = "path_to_ychan.jpg";
 const gameoverImg = document.getElementById("gameoverImage");
 
 let gameState = "title";
-let player = { x: canvas.width/2 - 25, y: canvas.height - 100, width: 50, height: 50 };
+let player = { x: canvas.width / 2 - 25, y: canvas.height - 100, width: 50, height: 50 };
 let score = 0, lives = 3;
 let enemies = [], recoveryItems = [], bullets = [];
 let playerSpeed = 10, enemySpeed = 2, enemySpawnRate = 0.02;
@@ -48,7 +48,7 @@ function isColliding(a, b) {
 function spawnEnemy() {
   if (bossAppeared) return;
   if (Math.random() < enemySpawnRate) {
-    const isMatsunaga = Math.random() < 1/3;
+    const isMatsunaga = Math.random() < 1 / 3;
     enemies.push({
       x: Math.random() * (canvas.width - 40),
       y: -40,
@@ -75,7 +75,7 @@ function spawnBoss() {
   bossAppeared = true;
   bossImage = Math.random() < 0.5 ? kchanImg : ychanImg;
   boss = {
-    x: canvas.width/2 - 60, y: 50,
+    x: canvas.width / 2 - 60, y: 50,
     width: 120, height: 80,
     dx: 3
   };
@@ -107,43 +107,43 @@ function checkCollisions() {
     return true;
   });
 
- bullets = bullets.filter(bullet => {
-  let hit = false;
+  bullets = bullets.filter(bullet => {
+    let hit = false;
 
-  // ボスに当たったら
-  if (boss && isColliding(bullet, boss)) {
-    bossHP -= 5;
-    hit = true;
-  }
-
-  // 松永に当たったら
-  enemies = enemies.filter(enemy => {
-    if (enemy.type === "blue" && isColliding(bullet, enemy)) {
+    // ボスに当たったら
+    if (boss && isColliding(bullet, boss)) {
+      bossHP -= 5;
       hit = true;
-      return false; // 松永削除
     }
-    return true;
+
+    // 松永に当たったら
+    enemies = enemies.filter(enemy => {
+      if (enemy.type === "blue" && isColliding(bullet, enemy)) {
+        hit = true;
+        return false; // 松永削除
+      }
+      return true;
+    });
+
+    return !hit && bullet.y > 0; // 当たった弾も削除
   });
-
-  return !hit && bullet.y > 0; // 当たった弾も削除
-});
-
+}
 
 // メインループ
 function update() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   if (gameState === "title") {
-    drawText("学力爆上げ↑↑", canvas.width/2, 250, 36);
-    drawText("モテ期よ、今すぐ来い！", canvas.width/2, 300, 24);
-    drawText("ぎんとの青春改造計画", canvas.width/2, 350, 24, "yellow");
-    drawText("タップでスタート", canvas.width/2, 400, 20, "gray");
+    drawText("学力爆上げ↑↑", canvas.width / 2, 250, 36);
+    drawText("モテ期よ、今すぐ来い！", canvas.width / 2, 300, 24);
+    drawText("ぎんとの青春改造計画", canvas.width / 2, 350, 24, "yellow");
+    drawText("タップでスタート", canvas.width / 2, 400, 20, "gray");
     return;
   }
 
   if (gameState === "gameover") {
-    drawText("GAME OVER", canvas.width/2, 280, 40, "red");
-    drawText(`偏差値: ${score}`, canvas.width/2, 330, 20);
+    drawText("GAME OVER", canvas.width / 2, 280, 40, "red");
+    drawText(`偏差値: ${score}`, canvas.width / 2, 330, 20);
     return;
   }
 
@@ -188,7 +188,7 @@ function update() {
 
     if (Math.random() < 0.05) {
       enemies.push({
-        x: boss.x + boss.width/2 - 20,
+        x: boss.x + boss.width / 2 - 20,
         y: boss.y + boss.height,
         width: 40, height: 40,
         type: "blue", dx: 0, dy: 3
@@ -201,7 +201,7 @@ function update() {
       score += 10;
     }
 
-    drawText(bossImage === kchanImg ? "Kちゃん" : "Yちゃん", canvas.width/2, 20, 24);
+    drawText(bossImage === kchanImg ? "Kちゃん" : "Yちゃん", canvas.width / 2, 20, 24);
   }
 
   checkCollisions();
@@ -218,9 +218,9 @@ function update() {
   if (boss) {
     ctx.drawImage(bossImage, boss.x, boss.y, boss.width, boss.height);
     ctx.fillStyle = "red";
-    ctx.fillRect(canvas.width/2 - 100, 10, 200, 10);
+    ctx.fillRect(canvas.width / 2 - 100, 10, 200, 10);
     ctx.fillStyle = "lime";
-    ctx.fillRect(canvas.width/2 - 100, 10, 200 * (bossHP / 100), 10);
+    ctx.fillRect(canvas.width / 2 - 100, 10, 200 * (bossHP / 100), 10);
   }
 
   drawText(`偏差値: ${score}`, 10, 30, 20, "white", "left");
@@ -236,7 +236,7 @@ canvas.addEventListener("click", e => {
   } else if (gameState === "playing" && bossAppeared) {
     const now = Date.now();
     if (now - lastShotTime > 200) {
-      bullets.push({ x: player.x + player.width/2 - 2.5, y: player.y });
+      bullets.push({ x: player.x + player.width / 2 - 2.5, y: player.y });
       lastShotTime = now;
     }
   }
@@ -249,7 +249,6 @@ canvas.addEventListener("touchmove", e => {
   player.x = touch.clientX - rect.left - player.width / 2;
   // Yはいじらない（= 固定されたまま）
 });
-
 
 // ループ開始
 function gameLoop() {
