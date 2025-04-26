@@ -245,9 +245,11 @@ canvas.addEventListener("click", e => {
 // プレイヤー操作（タッチ移動）
 canvas.addEventListener("touchmove", e => {
   const touch = e.touches[0];
-  player.x = touch.clientX - player.width / 2;
-  player.y = touch.clientY - player.height / 2;
+  const rect = canvas.getBoundingClientRect();
+  player.x = touch.clientX - rect.left - player.width / 2;
+  // Yはいじらない（= 固定されたまま）
 });
+
 
 // ループ開始
 function gameLoop() {
